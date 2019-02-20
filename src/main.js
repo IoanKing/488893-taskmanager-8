@@ -1,3 +1,5 @@
+'use strict';
+
 (() => {
   const MAX_TASK_COUNT = 20;
   const DEFAULT_TASK_COUNT = 10;
@@ -85,9 +87,7 @@
    * @return {string} Шаблон HTML блока с карточкой задачи.
    */
   const cardTemplate = (element) => {
-
     let hashtagList = ``;
-
     element.hashtags.forEach( (currentHashtag) => {
       hashtagList = hashtagList + hashtagTemplate(currentHashtag);
     });
@@ -133,7 +133,7 @@
                   date: <span class="card__date-status">no</span>
                 </button>
 
-                <fieldset class="card__date-deadline" ${(element.isDeadline) ? `disabled`: ``}>
+                <fieldset class="card__date-deadline" ${(element.isDeadline) ? `disabled` : ``}>
                   <label class="card__input-deadline-wrap">
                     <input
                       class="card__date"
@@ -253,14 +253,14 @@
               </div>
             </div>
 
-            <label class="card__img-wrap ${(!element.img) ? `card__img-wrap--empty` : ``}">
+            <label class="card__img-wrap ${(!element.image) ? `card__img-wrap--empty` : ``}">
               <input
                 type="file"
                 class="card__img-input visually-hidden"
                 name="img"
               />
               <img
-                src="${(element.img) ? element.img : ``}"
+                src="${(element.image) ? element.image : ``}"
                 alt="task picture"
                 class="card__img"
               />
@@ -401,7 +401,7 @@
         isDeadline: getRandomElement(mockData.DEADLINE),
         data: getRandomElement(mockData.DATE),
         time: getRandomElement(mockData.TIME),
-        img:  getRandomElement(mockData.IMG),
+        image:  getRandomElement(mockData.IMG),
         hashtags: newHashtags,
       };
       collection.push(newElement);
