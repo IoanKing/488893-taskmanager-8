@@ -2,7 +2,6 @@
 
 (() => {
   const MAX_TASK_COUNT = 20;
-  const DEFAULT_TASK_COUNT = 10;
 
   const Selector = {
     FILTER_SECTION: `main__filter`,
@@ -23,7 +22,7 @@
     DEADLINE: [true, false],
     DATE: [`23 september`, `10 februaly`, `23 februaly`, `10 jule`, `13 april`],
     TIME: [`11:15 PM`, `10:00 AM`, `6:25 PM`, `0:01 AM`, `1:30 PM`, ``],
-    IMG: [`img/sample-img.jpg`, ``, ``, ``],
+    IMAGE: [`img/sample-img.jpg`, ``, ``, ``],
     HASHTAG: [`#repeat`, `#cinema`, `#entertaiment`, `#testing`]
   };
 
@@ -88,7 +87,7 @@
    */
   const cardTemplate = (element) => {
     let hashtagList = ``;
-    element.hashtags.forEach( (currentHashtag) => {
+    element.hashtags.forEach((currentHashtag) => {
       hashtagList = hashtagList + hashtagTemplate(currentHashtag);
     });
 
@@ -401,7 +400,7 @@
         isDeadline: getRandomElement(mockData.DEADLINE),
         data: getRandomElement(mockData.DATE),
         time: getRandomElement(mockData.TIME),
-        image:  getRandomElement(mockData.IMG),
+        image: getRandomElement(mockData.IMAGE),
         hashtags: newHashtags,
       };
       collection.push(newElement);
@@ -416,8 +415,8 @@
   const renderFilterList = (collection) => {
     let isFirstElement = true;
     filterSection.innerHTML = ``;
-    collection.forEach( (element) => {
-      filterSection.insertAdjacentHTML(`beforeend`, filterTemplate(element, isFirstElement) );
+    collection.forEach((element) => {
+      filterSection.insertAdjacentHTML(`beforeend`, filterTemplate(element, isFirstElement));
       isFirstElement = false;
     });
   };
@@ -428,8 +427,8 @@
    */
   const cardRender = (collection) => {
     board.innerHTML = ``;
-    collection.forEach( (element) => {
-      board.insertAdjacentHTML(`beforeend`, cardTemplate(element) );
+    collection.forEach((element) => {
+      board.insertAdjacentHTML(`beforeend`, cardTemplate(element));
     });
   };
 
@@ -447,9 +446,9 @@
   cardRender(randomData);
 
   document.body.addEventListener(`click`, (evt) => {
-    if ( evt.target.classList.contains(`${Selector.FILTER_INPUT}`) ) {
+    if (evt.target.classList.contains(`${Selector.FILTER_INPUT}`)) {
       const filterCount = evt.target.nextElementSibling.querySelector(`span`).textContent;
-      refreshCollection( Math.min(+filterCount, MAX_TASK_COUNT) );
+      refreshCollection(Math.min(+filterCount, MAX_TASK_COUNT));
     }
   });
 
