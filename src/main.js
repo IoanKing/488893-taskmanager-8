@@ -380,16 +380,6 @@
   const getRandomElement = (collection) => collection[getRandomInt(0, collection.length)];
 
   /**
-   * Генерация случайного количества карточек задач.
-   * @param {number} maxCount Максимальное количество карточек задач.
-   * @return {object} коллекция объектов.
-   */
-  const getRandomCollection = (maxCount) => {
-    const countElement = getRandomInt(1, Math.min(maxCount, DEFAULT_TASK_COUNT));
-    return getCollection(countElement);
-  };
-
-  /**
    * Генерация коллекции случайных карточек задач.
    * @param {number} countCollection Количество карточек задач.
    * @return {object} коллекция объектов.
