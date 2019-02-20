@@ -1,59 +1,57 @@
-'use struct';
-
 (() => {
   const MAX_TASK_COUNT = 20;
   const DEFAULT_TASK_COUNT = 10;
 
   const Selector = {
-    FILTER_SECTION: 'main__filter',
-    FILTER_INPUT: 'filter__input',
-    FILTER_LABEL: 'filter__label',
-    BOARD_TASKS: 'board__tasks',
+    FILTER_SECTION: `main__filter`,
+    FILTER_INPUT: `filter__input`,
+    FILTER_LABEL: `filter__label`,
+    BOARD_TASKS: `board__tasks`,
   };
 
   const mockData = {
-    COLOR: ['black', 'yellow', 'blue', 'green', 'pink'],
+    COLOR: [`black`, `yellow`, `blue`, `green`, `pink`],
     FAVORITE: [true, false],
     REPEAT: [true, false],
-    TEXT: ['This is example of new task, you can add picture, set date and time, add tags.',
-      'It is example of repeating task. It marks by wave.',
-      'This is card with missing deadline.',
-      'Here is a card with filled data.',
-      ''],
+    TEXT: [`This is example of new task, you can add picture, set date and time, add tags.`,
+      `It is example of repeating task. It marks by wave.`,
+      `This is card with missing deadline.`,
+      `Here is a card with filled data.`,
+      ``],
     DEADLINE: [true, false],
-    DATE: ['23 september', '10 februaly', '23 februaly', '10 jule', '13 april'],
-    TIME: ['11:15 PM', '10:00 AM', '6:25 PM', '0:01 AM', '1:30 PM', ''],
-    IMG: ['img/sample-img.jpg', '', '', ''],
-    HASHTAG: ['#repeat', '#cinema', '#entertaiment', '#testing']
+    DATE: [`23 september`, `10 februaly`, `23 februaly`, `10 jule`, `13 april`],
+    TIME: [`11:15 PM`, `10:00 AM`, `6:25 PM`, `0:01 AM`, `1:30 PM`, ``],
+    IMG: [`img/sample-img.jpg`, ``, ``, ``],
+    HASHTAG: [`#repeat`, `#cinema`, `#entertaiment`, `#testing`]
   };
 
   const FilterMockData = [
     {
-      title: 'all',
+      title: `all`,
       count: 7,
     },
     {
-      title: 'overdue',
+      title: `overdue`,
       count: 0,
     },
     {
-      title: 'today',
+      title: `today`,
       count: 0,
     },
     {
-      title: 'favorites',
+      title: `favorites`,
       count: 7,
     },
     {
-      title: 'repeating',
+      title: `repeating`,
       count: 2,
     },
     {
-      title: 'tags',
+      title: `tags`,
       count: 6,
     },
     {
-      title: 'archive',
+      title: `archive`,
       count: 115,
     },
   ];
@@ -73,8 +71,8 @@
       id="filter__${element.title}"
       class="filter__input visually-hidden"
       name="filter"
-      ${(isFirst) ? 'checked' : ''}
-      ${(element.count === 0) ? 'disabled' : ''}
+      ${(isFirst) ? `checked` : ``}
+      ${(element.count === 0) ? `disabled` : ``}
     />
     <label for="filter__${element.title}" class="filter__label">
       ${element.title.toUpperCase()}
@@ -94,7 +92,7 @@
       hashtagList = hashtagList + hashtagTemplate(currentHashtag);
     });
 
-    return `<article class="card card--${(element.color)} ${(element.isRepeat) ? 'card--repeat' : ''}">
+    return `<article class="card card--${(element.color)} ${(element.isRepeat) ? `card--repeat` : ``}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__control">
@@ -106,7 +104,7 @@
             </button>
             <button
               type="button"
-              class="card__btn card__btn--favorites ${(!element.isFavorite)? 'card__btn--disabled' : ''}"
+              class="card__btn card__btn--favorites ${(!element.isFavorite) ? `card__btn--disabled` : ``}"
             >
               favorites
             </button>
@@ -135,7 +133,7 @@
                   date: <span class="card__date-status">no</span>
                 </button>
 
-                <fieldset class="card__date-deadline" ${(element.isDeadline)? 'disabled': ''}>
+                <fieldset class="card__date-deadline" ${(element.isDeadline) ? `disabled`: ``}>
                   <label class="card__input-deadline-wrap">
                     <input
                       class="card__date"
@@ -255,14 +253,14 @@
               </div>
             </div>
 
-            <label class="card__img-wrap ${(!element.img) ? 'card__img-wrap--empty' : ''}">
+            <label class="card__img-wrap ${(!element.img) ? `card__img-wrap--empty` : ``}">
               <input
                 type="file"
                 class="card__img-input visually-hidden"
                 name="img"
               />
               <img
-                src="${(element.img) ? element.img : ''}"
+                src="${(element.img) ? element.img : ``}"
                 alt="task picture"
                 class="card__img"
               />
@@ -427,9 +425,9 @@
    */
   const renderFilterList = (collection) => {
     let isFirstElement = true;
-    filterSection.innerHTML = '';
+    filterSection.innerHTML = ``;
     collection.forEach( (element) => {
-      filterSection.insertAdjacentHTML('beforeend', filterTemplate(element, isFirstElement) );
+      filterSection.insertAdjacentHTML(`beforeend`, filterTemplate(element, isFirstElement) );
       isFirstElement = false;
     });
   };
@@ -441,7 +439,7 @@
   const cardRender = (collection) => {
     board.innerHTML = ``;
     collection.forEach( (element) => {
-      board.insertAdjacentHTML('beforeend', cardTemplate(element) );
+      board.insertAdjacentHTML(`beforeend`, cardTemplate(element) );
     });
   };
 
@@ -458,9 +456,9 @@
   const randomData = getCollection(7);
   cardRender(randomData);
 
-  document.body.addEventListener('click', (evt) => {
+  document.body.addEventListener(`click`, (evt) => {
     if ( evt.target.classList.contains(`${Selector.FILTER_INPUT}`) ) {
-      const filterCount = evt.target.nextElementSibling.querySelector('span').textContent;
+      const filterCount = evt.target.nextElementSibling.querySelector(`span`).textContent;
       refreshCollection( Math.min(+filterCount, MAX_TASK_COUNT) );
     }
   });
