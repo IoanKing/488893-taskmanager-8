@@ -2,6 +2,8 @@
 
 (() => {
   const MAX_TASK_COUNT = 20;
+  const DEFAULT_TASK_COUNT = 7;
+  const MAX_HASHTAG_COUNT = 4;
 
   const Selector = {
     FILTER_SECTION: `main__filter`,
@@ -10,20 +12,20 @@
     BOARD_TASKS: `board__tasks`,
   };
 
-  const mockData = {
-    COLOR: [`black`, `yellow`, `blue`, `green`, `pink`],
+  const MockData = {
+    COLORS: [`black`, `yellow`, `blue`, `green`, `pink`],
     FAVORITE: [true, false],
     REPEAT: [true, false],
-    TEXT: [`This is example of new task, you can add picture, set date and time, add tags.`,
+    TEXTS: [`This is example of new task, you can add picture, set date and time, add tags.`,
       `It is example of repeating task. It marks by wave.`,
       `This is card with missing deadline.`,
       `Here is a card with filled data.`,
       ``],
     DEADLINE: [true, false],
-    DATE: [`23 september`, `10 februaly`, `23 februaly`, `10 jule`, `13 april`],
-    TIME: [`11:15 PM`, `10:00 AM`, `6:25 PM`, `0:01 AM`, `1:30 PM`, ``],
-    IMAGE: [`img/sample-img.jpg`, ``, ``, ``],
-    HASHTAG: [`#repeat`, `#cinema`, `#entertaiment`, `#testing`]
+    DATES: [`23 september`, `10 februaly`, `23 februaly`, `10 jule`, `13 april`],
+    TIMES: [`11:15 PM`, `10:00 AM`, `6:25 PM`, `0:01 AM`, `1:30 PM`, ``],
+    IMAGES: [`img/sample-img.jpg`, ``],
+    HASHTAGS: [`#repeat`, `#cinema`, `#entertaiment`, `#testing`]
   };
 
   const FilterMockData = [
@@ -64,9 +66,9 @@
    * Шаблон фильтра.
    * @param {object} element Объект с данными для фильтра.
    * @param {bool} isFirst Признак первого элемента.
-   * @return {string} шаблон HTML блока с фильтром.
+   * @return {string} разметка HTML блока с фильтром.
    */
-  const filterTemplate = (element, isFirst) => `
+  const getFilterElement = (element, isFirst) => `
     <input
       type="radio"
       id="filter__${element.title}"
@@ -83,12 +85,12 @@
   /**
    * Шаблон карточки задачи.
    * @param {object} element Объект с данными для карточки задачи.
-   * @return {string} Шаблон HTML блока с карточкой задачи.
+   * @return {string} разметка HTML блока с карточкой задачи.
    */
-  const cardTemplate = (element) => {
+  const getCardElement = (element) => {
     let hashtagList = ``;
     element.hashtags.forEach((currentHashtag) => {
-      hashtagList = hashtagList + hashtagTemplate(currentHashtag);
+      hashtagList = hashtagList + getHashtagElement(currentHashtag);
     });
 
     return `<article class="card card--${(element.color)} ${(element.isRepeat) ? `card--repeat` : ``}">
@@ -345,9 +347,9 @@
   /**
    * Шаблон хештега.
    * @param {string} hashtag Наименование хештега.
-   * @return {string} Шаблон HTML блока для хештега.
+   * @return {string} разметка HTML блока для хештега.
    */
-  const hashtagTemplate = (hashtag) => `
+  const getHashtagElement = (hashtag) => `
     <span class="card__hashtag-inner">
       <input
         type="hidden"
@@ -365,11 +367,11 @@
 
   /**
    * Генерация случайного числа на заданном интервале.
-   * @param {number} min минимальное значение интервала
-   * @param {number} max максимальнео значение интервала
-   * @return {number} Число.
+   * @param {number} min минимальное значение интервала.
+   * @param {number} max максимальнео значение интервала.
+   * @return {number} сгенерированное число.
    */
-  const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+  const getRandomInt = (min = 0, max = MAX_TASK_COUNT) => Math.floor(Math.random() * (max - min)) + min;
 
   /**
    * Выбор случайного элемента из коллекции объектов.
@@ -380,27 +382,29 @@
 
   /**
    * Генерация коллекции случайных карточек задач.
-   * @param {number} countCollection Количество карточек задач.
+   * @param {number} countCollection количество карточек задач.
    * @return {object} коллекция объектов.
    */
   const getCollection = (countCollection) => {
     const collection = [];
     for (let i = 0; i < countCollection; i++) {
-      const countHashtag = getRandomInt(0, 4);
+      const countHashtag = getRandomInt(0, MAX_HASHTAG_COUNT);
       const newHashtags = [];
-      for (let j = 0; j < countHashtag; j++) {
-        const tag = getRandomElement(mockData.HASHTAG);
-        newHashtags.push(tag);
+      const hashtagData = MockData.HASHTAGS.slice();
+      for (let j = 0; j < Math.min(countHashtag, hashtagData.length); j++) {
+        const tagIndex = getRandomInt(0, hashtagData.length);
+        newHashtags.push(hashtagData[tagIndex]);
+        hashtagData.splice(tagIndex, 1);
       }
       const newElement = {
-        color: getRandomElement(mockData.COLOR),
-        isFavorite: getRandomElement(mockData.FAVORITE),
-        isRepeat: getRandomElement(mockData.REPEAT),
-        text: getRandomElement(mockData.TEXT),
-        isDeadline: getRandomElement(mockData.DEADLINE),
-        data: getRandomElement(mockData.DATE),
-        time: getRandomElement(mockData.TIME),
-        image: getRandomElement(mockData.IMAGE),
+        color: getRandomElement(MockData.COLORS),
+        isFavorite: getRandomElement(MockData.FAVORITE),
+        isRepeat: getRandomElement(MockData.REPEAT),
+        text: getRandomElement(MockData.TEXTS),
+        isDeadline: getRandomElement(MockData.DEADLINE),
+        data: getRandomElement(MockData.DATES),
+        time: getRandomElement(MockData.TIMES),
+        image: getRandomElement(MockData.IMAGES),
         hashtags: newHashtags,
       };
       collection.push(newElement);
@@ -415,41 +419,62 @@
   const renderFilterList = (collection) => {
     let isFirstElement = true;
     filterSection.innerHTML = ``;
+    let fragment = ``;
     collection.forEach((element) => {
-      filterSection.insertAdjacentHTML(`beforeend`, filterTemplate(element, isFirstElement));
+      fragment = fragment + getFilterElement(element, isFirstElement);
       isFirstElement = false;
     });
+    filterSection.insertAdjacentHTML(`beforeend`, fragment);
   };
 
   /**
    * Отрисовка карточек задач.
    * @param {object} collection Коллекция обьектов "Карточки задач".
    */
-  const cardRender = (collection) => {
+  const renderCardList = (collection) => {
     board.innerHTML = ``;
+    let fragment = ``;
     collection.forEach((element) => {
-      board.insertAdjacentHTML(`beforeend`, cardTemplate(element));
+      fragment = fragment + getCardElement(element);
     });
+    board.insertAdjacentHTML(`beforeend`, fragment);
   };
 
   /**
    * Обновление списка карточек задач.
+   * Генерирует новый случайный список задач и выполняет их отрисовку.
    * @param {number} maxCount Максимальное количество карточек задач.
    */
   const refreshCollection = (maxCount = MAX_TASK_COUNT) => {
     const newRandomData = getCollection(maxCount);
-    cardRender(newRandomData);
+    renderCardList(newRandomData);
   };
 
-  renderFilterList(FilterMockData);
-  const randomData = getCollection(7);
-  cardRender(randomData);
-
-  document.body.addEventListener(`click`, (evt) => {
+  /**
+   * Обработчик события клика на активный фильтр - запускает обновление списка карточек задач.
+   * @param {object} evt объект события Event - нажатия клика.
+   */
+  const onFilterClick = (evt) => {
     if (evt.target.classList.contains(`${Selector.FILTER_INPUT}`)) {
       const filterCount = evt.target.nextElementSibling.querySelector(`span`).textContent;
       refreshCollection(Math.min(+filterCount, MAX_TASK_COUNT));
     }
-  });
+  };
+
+  /**
+   * Инициализация скриптов для сайта.
+   *  Запускает фнукцию отрисовки фильтров;
+   *  Запускает функцию генерации случайной коллекции задач;
+   *  Запускает функцию орисовки карточек задач;
+   *  Запускает обработкик обработки клика на фильтр.
+   */
+  const init = () => {
+    renderFilterList(FilterMockData);
+    const randomData = getCollection(DEFAULT_TASK_COUNT);
+    renderCardList(randomData);
+    filterSection.addEventListener(`click`, onFilterClick);
+  };
+
+  init();
 
 })();
