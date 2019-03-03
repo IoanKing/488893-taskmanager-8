@@ -2,23 +2,34 @@ import {getRandomInt, getRandomElement} from "./utils";
 
 const MAX_TASK_COUNT = 20;
 const DEFAULT_TASK_COUNT = 7;
-const MAX_HASHTAG_COUNT = 4;
+const MAX_HASHTAG_COUNT = 3;
 
 const MockData = {
-  COLORS: [`black`, `yellow`, `blue`, `green`, `pink`],
-  FAVORITE: [true, false],
-  REPEAT: [true, false],
-  TEXTS: [`This is example of new task, you can add picture, set date and time, add tags.`,
-    `It is example of repeating task. It marks by wave.`,
-    `This is card with missing deadline.`,
-    `Here is a card with filled data.`,
-    ``],
-  DEADLINE: [true, false],
-  DATES: [`23 september`, `10 februaly`, `23 februaly`, `10 jule`, `13 april`],
-  TIMES: [`11:15 PM`, `10:00 AM`, `6:25 PM`, `0:01 AM`, `1:30 PM`, ``],
-  IMAGES: [`img/sample-img.jpg`, ``],
-  HASHTAGS: [`#repeat`, `#cinema`, `#entertaiment`, `#testing`]
+  TITLE: [
+    `Изучить теорию.`,
+    `Сделать домашку.`,
+    `Пройти интенсив на соточку.`,
+    ``
+  ],
+  COLOR: [
+    `black`,
+    `yellow`,
+    `blue`,
+    `green`,
+    `pink`
+  ],
+  TAGS: [
+    `homework`,
+    `theory`,
+    `practice`,
+    `intensive`,
+    `keks`,
+    `development`,
+    `course`,
+  ],
+  BOOL: [true, false, false, false, false, false, false, false, false, false, false]
 };
+const BOOL_LNGTH = MockData.BOOL.length;
 
 const FilterMockData = [
   {
@@ -52,35 +63,41 @@ const FilterMockData = [
 ];
 
 /**
+ * Генерация карточки задачи.
+ * @return {object} коллекция объектов.
+ */
+const getTask = () => ({
+  title: MockData.TITLE[getRandomInt(0, MockData.TITLE.length)],
+  dueDate: Date.now() + 1 + Math.floor(Math.random() * 7) * 24 * Math.floor(Math.random() * 60) * Math.floor(Math.random() * 60) * 1000,
+  tags: new Set(new Array(getRandomInt(0, MAX_HASHTAG_COUNT))
+    .fill()
+    .map(() => getRandomElement(MockData.TAGS))
+  ),
+  picture: `http://picsum.photos/100/100?r=${Math.random()}`,
+  color: MockData.COLOR[getRandomInt(0, MockData.COLOR.length)],
+  repeatingDays: {
+    'mo': MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+    'tu': MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+    'we': MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+    'th': MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+    'fr': MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+    'sa': MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+    'su': MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+  },
+  isFavorite: MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+  isDone: MockData.BOOL[getRandomInt(0, BOOL_LNGTH)],
+});
+
+/**
  * Генерация коллекции случайных карточек задач.
  * @param {number} countCollection количество карточек задач.
  * @return {object} коллекция объектов.
  */
 const getMockCollection = (countCollection) => {
-  const collection = [];
-  for (let i = 0; i < countCollection; i++) {
-    const countHashtag = getRandomInt(0, MAX_HASHTAG_COUNT);
-    const newHashtags = [];
-    const hashtagData = MockData.HASHTAGS.slice();
-    for (let j = 0; j < Math.min(countHashtag, hashtagData.length); j++) {
-      const tagIndex = getRandomInt(0, hashtagData.length);
-      newHashtags.push(hashtagData[tagIndex]);
-      hashtagData.splice(tagIndex, 1);
-    }
-    const newElement = {
-      color: getRandomElement(MockData.COLORS),
-      isFavorite: getRandomElement(MockData.FAVORITE),
-      isRepeat: getRandomElement(MockData.REPEAT),
-      text: getRandomElement(MockData.TEXTS),
-      isDeadline: getRandomElement(MockData.DEADLINE),
-      data: getRandomElement(MockData.DATES),
-      time: getRandomElement(MockData.TIMES),
-      image: getRandomElement(MockData.IMAGES),
-      hashtags: newHashtags,
-    };
-    collection.push(newElement);
-  }
+  let collection = new Array(countCollection)
+    .fill()
+    .map(() => getTask());
   return collection;
 };
 
-export {MAX_TASK_COUNT, DEFAULT_TASK_COUNT, MAX_HASHTAG_COUNT, MockData, FilterMockData, getMockCollection};
+export {MAX_TASK_COUNT, DEFAULT_TASK_COUNT, MAX_HASHTAG_COUNT, FilterMockData, getMockCollection};

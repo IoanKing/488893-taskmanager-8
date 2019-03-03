@@ -12,7 +12,7 @@ export default (hashtag) => `
       class="card__hashtag-hidden-input"
     />
     <button type="button" class="card__hashtag-name">
-      ${hashtag}
+      #${hashtag}
     </button>
     <button type="button" class="card__hashtag-delete">
       delete
