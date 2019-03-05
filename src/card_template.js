@@ -1,4 +1,5 @@
 import getHashtagElement from "./hashtag_template";
+import {DateGenerator} from "./utils";
 
 /**
  * Шаблон карточки задачи.
@@ -6,12 +7,17 @@ import getHashtagElement from "./hashtag_template";
  * @return {string} разметка HTML блока с карточкой задачи.
  */
 export default (element) => {
-  let hashtagList = ``;
-  element.hashtags.forEach((currentHashtag) => {
-    hashtagList = hashtagList + getHashtagElement(currentHashtag);
-  });
+  const hashtagList = [...element.tags].map((it) => getHashtagElement(it)).join(` `);
+  const newDate = DateGenerator.takeDate(element.dueDate);
+  const isRepeating = element.repeatingDays[`mo`] ||
+    element.repeatingDays[`tu`] ||
+    element.repeatingDays[`we`] ||
+    element.repeatingDays[`th`] ||
+    element.repeatingDays[`fr`] ||
+    element.repeatingDays[`sa`] ||
+    element.repeatingDays[`su`];
 
-  return `<article class="card card--${(element.color)} ${(element.isRepeat) ? `card--repeat` : ``}">
+  return `<article class="card card--${(element.color)} ${isRepeating ? `card--repeat` : ``}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -41,7 +47,7 @@ export default (element) => {
               class="card__text"
               placeholder="Start typing your text here..."
               name="text"
-            >${element.text}</textarea>
+            >${element.title}</textarea>
           </label>
         </div>
 
@@ -57,18 +63,18 @@ export default (element) => {
                   <input
                     class="card__date"
                     type="text"
-                    placeholder="${element.data}"
+                    placeholder="${newDate.getDate()} ${DateGenerator.MONTH_NAMES[newDate.getMonth()]}"
                     name="date"
-                    value="${element.data}"
+                    value="${newDate.getDate()} ${DateGenerator.MONTH_NAMES[newDate.getMonth()]}"
                   />
                 </label>
                 <label class="card__input-deadline-wrap">
                   <input
                     class="card__time"
                     type="text"
-                    placeholder="${element.time}"
+                    placeholder="${DateGenerator.takeTime(newDate)}"
                     name="time"
-                    value="${element.time}"
+                    value="${DateGenerator.takeTime(newDate)}"
                   />
                 </label>
               </fieldset>
@@ -172,14 +178,14 @@ export default (element) => {
             </div>
           </div>
 
-          <label class="card__img-wrap ${(!element.image) ? `card__img-wrap--empty` : ``}">
+          <label class="card__img-wrap ${(!element.picture) ? `card__img-wrap--empty` : ``}">
             <input
               type="file"
               class="card__img-input visually-hidden"
               name="img"
             />
             <img
-              src="${(element.image) ? element.image : ``}"
+              src="${(element.picture) ? element.picture : ``}"
               alt="task picture"
               class="card__img"
             />
