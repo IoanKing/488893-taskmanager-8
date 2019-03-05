@@ -1,10 +1,10 @@
 const MIN_COUNT = 0;
 const MAX_COUNT = 30;
 
-const DateFunc = {
-  monthNames: [`January`, `February`, `March`, `April`, `May`, `June`, `Jule`, `August`, `September`, `October`, `November`, `December`],
+const DateGenerator = {
+  MONTH_NAMES: [`January`, `February`, `March`, `April`, `May`, `June`, `Jule`, `August`, `September`, `October`, `November`, `December`],
   takeMinutes: (date) => `${(date.getMinutes() < 10) ? `0${date.getMinutes()}` : date.getMinutes()}`,
-  takeTime: (date) => `${(date.getHours() > 12) ? `${date.getHours() - 12}:${DateFunc.takeMinutes(date)} PM` : `${date.getHours()}:${DateFunc.takeMinutes(date)} AM`}`,
+  takeTime: (date) => `${(date.getHours() > 12) ? `${date.getHours() - 12}:${DateGenerator.takeMinutes(date)} PM` : `${date.getHours()}:${DateGenerator.takeMinutes(date)} AM`}`,
   takeDate: (date) => new Date(date)
 };
 
@@ -23,4 +23,4 @@ const getRandomInt = (min = MIN_COUNT, max = MAX_COUNT) => Math.floor(Math.rando
  */
 const getRandomElement = (collection) => collection[getRandomInt(0, collection.length)];
 
-export {getRandomInt, getRandomElement, DateFunc};
+export {getRandomInt, getRandomElement, DateGenerator};

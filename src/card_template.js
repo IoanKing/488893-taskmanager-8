@@ -1,5 +1,5 @@
 import getHashtagElement from "./hashtag_template";
-import {DateFunc} from "./utils";
+import {DateGenerator} from "./utils";
 
 /**
  * Шаблон карточки задачи.
@@ -8,8 +8,8 @@ import {DateFunc} from "./utils";
  */
 export default (element) => {
   const hashtagList = [...element.tags].map((it) => getHashtagElement(it)).join(` `);
-  const newDate = DateFunc.takeDate(element.dueDate);
-  const checks = element.repeatingDays[`mo`] ||
+  const newDate = DateGenerator.takeDate(element.dueDate);
+  const isRepeating = element.repeatingDays[`mo`] ||
     element.repeatingDays[`tu`] ||
     element.repeatingDays[`we`] ||
     element.repeatingDays[`th`] ||
@@ -17,7 +17,7 @@ export default (element) => {
     element.repeatingDays[`sa`] ||
     element.repeatingDays[`su`];
 
-  return `<article class="card card--${(element.color)} ${checks ? `card--repeat` : ``}">
+  return `<article class="card card--${(element.color)} ${isRepeating ? `card--repeat` : ``}">
     <form class="card__form" method="get">
       <div class="card__inner">
         <div class="card__control">
@@ -63,18 +63,18 @@ export default (element) => {
                   <input
                     class="card__date"
                     type="text"
-                    placeholder="${newDate.getDate()} ${DateFunc.monthNames[newDate.getMonth()]}"
+                    placeholder="${newDate.getDate()} ${DateGenerator.MONTH_NAMES[newDate.getMonth()]}"
                     name="date"
-                    value="${newDate.getDate()} ${DateFunc.monthNames[newDate.getMonth()]}"
+                    value="${newDate.getDate()} ${DateGenerator.MONTH_NAMES[newDate.getMonth()]}"
                   />
                 </label>
                 <label class="card__input-deadline-wrap">
                   <input
                     class="card__time"
                     type="text"
-                    placeholder="${DateFunc.takeTime(newDate)}"
+                    placeholder="${DateGenerator.takeTime(newDate)}"
                     name="time"
-                    value="${DateFunc.takeTime(newDate)}"
+                    value="${DateGenerator.takeTime(newDate)}"
                   />
                 </label>
               </fieldset>
