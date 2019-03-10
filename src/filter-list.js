@@ -31,7 +31,7 @@ export default class FilterList {
           this._onTasksList.update(this._dataTask);
           break;
         case `Repeating`:
-          this._dataTask = Object.values(mockdata).filter((it) => (Object.values(it.repeatingDays).some((it) => it === true)));
+          this._dataTask = Object.values(mockdata).filter((it) => (Object.values(it.repeatingDays).some((element) => element === true)));
           this._onTasksList.update(this._dataTask);
           break;
         case `Tags`:
