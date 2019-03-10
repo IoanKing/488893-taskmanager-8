@@ -5,5 +5,6 @@ export default {
   BOARD_TASKS: `board__tasks`,
   CARD_EDIT_BTN: `card__btn--edit`,
   CARD_EDIT: `card--edit`,
+  CARD_FROM: `card__form`,
   CHECKED: `checked`
 };

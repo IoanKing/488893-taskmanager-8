@@ -18,17 +18,25 @@ export default class TaskEdit {
     };
   }
 
-  _isRepeated() {
-    return Object.values(this._repeatingDays).some((it) => it === true);
-  }
-
   get _isDeadline() {
     return this._dueDate < new Date();
   }
 
-  _onEditButtonClick() {
-    this._status.isEdit = !this._status.isEdit;
-    this.update();
+  _onSubmitButtonClick(evt) {
+    evt.preventDefault();
+    return typeof this._onEdit === `function` && this._onEdit();
+  }
+
+  _isRepeated() {
+    return Object.values(this._repeatingDays).some((it) => it === true);
+  }
+
+  set onSubmit(fn) {
+    this._onSubmit = fn;
+  }
+
+  get element() {
+    return this._element;
   }
 
   get template() {
@@ -39,14 +47,17 @@ export default class TaskEdit {
     const date = `${newDate.getDate()} ${month}`;
     const time = newDate.toLocaleString(`en-US`, {hour12: true, hour: `2-digit`, minute: `2-digit`});
     return `
-    <article class="card card--${(this._color)} ${this._isRepeated() ? `card--repeat` : ``}${ this._isDeadline ? ` card--deadline` : ``}">
+    <article class="card card--edit card--${(this._color)} ${this._isRepeated() ? `card--repeat` : ``}${ this._isDeadline ? ` card--deadline` : ``}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__control">
             <button type="button" class="card__btn card__btn--edit">
               edit
             </button>
-            <button type="button" class="card__btn card__btn--archive">
+            <button
+              type="button"
+              class="card__btn card__btn--archive ${!this._isDone ? `card__btn--disabled` : ``}"
+            >
               archive
             </button>
             <button
@@ -313,13 +324,13 @@ export default class TaskEdit {
   }
 
   bind() {
-    this._element.querySelector(`.${Selectors.CARD_EDIT_BTN}`)
-      .addEventListener(`click`, this._onEditButtonClick.bind(this));
+    this._element.querySelector(`.${Selectors.CARD_FROM}`)
+      .addEventListener(`submit `, this._onSubmitButtonClick.bind(this));
   }
 
   unbind() {
-    this._element.querySelector(`.${Selectors.CARD_EDIT_BTN}`)
-      .removeEventListener(`click`, this._onEditButtonClick.bind(this));
+    this._element.querySelector(`.${Selectors.CARD_FROM}`)
+      .removeEventListener(`submit `, this._onSubmitButtonClick.bind(this));
   }
 
   update() {

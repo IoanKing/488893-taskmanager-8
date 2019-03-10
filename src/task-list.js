@@ -2,7 +2,7 @@ import Task from "./task";
 import mockdata from "./mock";
 import TaskEdit from "./task-edit";
 
-const MAX_TASK_PAGE = 20;
+const MAX_TASK_ONPAGE = 20;
 
 export default class TaskList {
   constructor(container) {
@@ -34,7 +34,6 @@ export default class TaskList {
     collection.forEach((element)=>{
       this._element.push(this.makeTask(element));
     });
-    console.log(this._element);
   }
 
   get element() {
@@ -42,7 +41,8 @@ export default class TaskList {
   }
 
   render() {
-    const partOfElements = this._element.slice(this._displayedTask, Math.min((this._displayedTask + MAX_TASK_PAGE), this._element.length));
+    this._container.innerHTML = ``;
+    const partOfElements = this._element.slice(this._displayedTask, Math.min((this._displayedTask + MAX_TASK_ONPAGE), this._element.length));
 
     const fragment = document.createDocumentFragment();
     partOfElements.forEach((it) => {

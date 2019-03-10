@@ -26,12 +26,13 @@ const getRandomElement = (collection) => collection[getRandomInt(0, collection.l
 /**
  * Создание DOM элемента на основании шаблона.
  * @param {object} elementTemplate шаблон DOM элемента.
+ * @param {bool} isMultiplyElement признак нескольких элементов в шаблоне.
  * @return {object} DOM элемент.
  */
-const createElement = (elementTemplate) => {
+const createElement = (elementTemplate, isMultiplyElement = false) => {
   const newElement = document.createElement(`div`);
   newElement.innerHTML = elementTemplate;
-  return newElement.firstChild;
+  return (isMultiplyElement) ? newElement : newElement.firstChild;
 };
 
 export {getRandomInt, getRandomElement, DateGenerator, createElement};
