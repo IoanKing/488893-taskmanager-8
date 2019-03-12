@@ -23,4 +23,16 @@ const getRandomInt = (min = MIN_COUNT, max = MAX_COUNT) => Math.floor(Math.rando
  */
 const getRandomElement = (collection) => collection[getRandomInt(0, collection.length)];
 
-export {getRandomInt, getRandomElement, DateGenerator};
+/**
+ * Создание DOM элемента на основании шаблона.
+ * @param {object} elementTemplate шаблон DOM элемента.
+ * @param {bool} isMultiplyElement признак нескольких элементов в шаблоне.
+ * @return {object} DOM элемент.
+ */
+const createElement = (elementTemplate, isMultiplyElement = false) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = elementTemplate;
+  return (isMultiplyElement) ? newElement : newElement.firstChild;
+};
+
+export {getRandomInt, getRandomElement, DateGenerator, createElement};
