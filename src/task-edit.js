@@ -12,7 +12,8 @@ export default class TaskEdit {
     this._tags = collection.tags;
     this._dueDate = collection.dueDate;
 
-    this._this = null;
+    this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
+    this._element = null;
     this._status = {
       isEdit: false
     };
@@ -23,8 +24,9 @@ export default class TaskEdit {
   }
 
   _onSubmitButtonClick(evt) {
-    evt.preventDefault();
-    return typeof this._onSubmit === `function` && this._onSubmit();
+    if (typeof this._onSubmit === `function`) {
+      this._onSubmit(evt);
+    }
   }
 
   _isRepeated() {
@@ -314,23 +316,23 @@ export default class TaskEdit {
 
   render() {
     this._element = createElement(this.template);
-    this.bind();
+    this.addListener();
     return this._element;
   }
 
   unrender() {
-    this.unbind();
+    this.removeListener();
     this._element = null;
   }
 
-  bind() {
+  addListener() {
     this._element.querySelector(`.${Selectors.CARD_FROM}`)
-      .addEventListener(`submit `, this._onSubmitButtonClick.bind(this));
+      .addEventListener(`submit`, this._onSubmitButtonClick.bind(this));
   }
 
-  unbind() {
+  removeListener() {
     this._element.querySelector(`.${Selectors.CARD_FROM}`)
-      .removeEventListener(`submit `, this._onSubmitButtonClick.bind(this));
+      .removeEventListener(`submit`, this._onSubmitButtonClick.bind(this));
   }
 
   update() {

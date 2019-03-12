@@ -12,6 +12,7 @@ export default class Task {
     this._tags = collection.tags;
     this._dueDate = collection.dueDate;
 
+    this._onEditButtonClick = this._onEditButtonClick.bind(this);
     this._element = null;
     this._status = {
       isEdit: false
@@ -22,13 +23,14 @@ export default class Task {
     return this._dueDate < new Date();
   }
 
-  _onEditButtonClick(evt) {
-    evt.preventDefault();
-    return typeof this._onEdit === `function` && this._onEdit();
-  }
-
   _isRepeated() {
     return Object.values(this._repeatingDays).some((it) => it === true);
+  }
+
+  _onEditButtonClick(evt) {
+    if (typeof this._onEdit === `function`) {
+      this._onEdit(evt);
+    }
   }
 
   set onEdit(fn) {
@@ -147,23 +149,23 @@ export default class Task {
 
   render() {
     this._element = createElement(this.template);
-    this.bind();
+    this.addListener();
     return this._element;
   }
 
   unrender() {
-    this.unbind();
+    this.removeListener();
     this._element = null;
   }
 
-  bind() {
+  addListener() {
     this._element.querySelector(`.${Selectors.CARD_EDIT_BTN}`)
-      .addEventListener(`click`, this._onEditButtonClick.bind(this));
+      .addEventListener(`click`, this._onEditButtonClick);
   }
 
-  unbind() {
+  removeListener() {
     this._element.querySelector(`.${Selectors.CARD_EDIT_BTN}`)
-      .removeEventListener(`click`, this._onEditButtonClick.bind(this));
+      .removeEventListener(`click`, this._onEditButtonClick);
   }
 
   update() {

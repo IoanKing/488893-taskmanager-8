@@ -7,33 +7,36 @@ const MAX_TASK_ONPAGE = 20;
 export default class TaskList {
   constructor(container) {
     this._container = container;
-    this._displayedTask = 0;
-    this._element = null;
-    this.getCollection(mockdata);
+    this._element = this.getCollection(mockdata);
   }
 
   makeTask(element) {
     const newTask = new Task(element);
-    const newTaskEdit = new TaskEdit(element);
-    this._container.appendChild(newTask.render());
-    newTask.onEdit = () => {
+    newTask.onEdit = (evtEdit) => {
+      evtEdit.preventDefault();
+
+      const newTaskEdit = new TaskEdit(element);
+
       newTaskEdit.render();
       this._container.replaceChild(newTaskEdit.element, newTask.element);
       newTask.unrender();
-    };
-    newTaskEdit.onSubmit = () => {
-      newTask.render();
-      this._container.replaceChild(newTask.element, newTaskEdit.element);
-      newTaskEdit.unrender();
+
+      newTaskEdit.onSubmit = (evtSubmit) => {
+        evtSubmit.preventDefault();
+        newTask.render();
+        this._container.replaceChild(newTask.element, newTaskEdit.element);
+        newTaskEdit.unrender();
+      };
     };
     return newTask;
   }
 
   getCollection(collection) {
-    this._element = [];
-    collection.forEach((element)=>{
-      this._element.push(this.makeTask(element));
+    const tasks = [];
+    collection.forEach((element) => {
+      tasks.push(this.makeTask(element));
     });
+    return tasks;
   }
 
   get element() {
@@ -42,7 +45,7 @@ export default class TaskList {
 
   render() {
     this._container.innerHTML = ``;
-    const partOfElements = this._element.slice(this._displayedTask, Math.min((this._displayedTask + MAX_TASK_ONPAGE), this._element.length));
+    const partOfElements = this._element.slice(0, Math.min(MAX_TASK_ONPAGE, this._element.length));
 
     const fragment = document.createDocumentFragment();
     partOfElements.forEach((it) => {
