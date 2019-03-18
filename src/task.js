@@ -37,10 +37,6 @@ export default class Task {
     this._onEdit = fn;
   }
 
-  get element() {
-    return this._element;
-  }
-
   get template() {
     const newDate = new Date();
     newDate.setTime(this._dueDate);

@@ -19,9 +19,7 @@ const init = () => {
   const filterList = new FilterList(filterContainer);
   const taskList = new TaskList(taskContainer);
   filterList.onTasksList = taskList;
-  filterList.render(filterContainer);
-
-  taskList.defaultContainer = taskContainer;
+  filterList.render();
 
   taskList.Filter = filterDefault;
   taskList.render();

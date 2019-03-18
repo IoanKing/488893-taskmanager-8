@@ -3,9 +3,9 @@ import mockdata from "./mock";
 import TaskEdit from "./task-edit";
 
 export default class TaskList {
-  constructor() {
+  constructor(container) {
+    this._container = container;
     this._collection = this._getCollection(mockdata);
-    this._element = null;
     this._onFilterData = Object.values(this._collection);
   }
 
@@ -48,10 +48,6 @@ export default class TaskList {
     this._onFilter = fn;
   }
 
-  set defaultContainer(obj) {
-    this._element = obj;
-  }
-
   get element() {
     return this._element;
   }
@@ -60,18 +56,19 @@ export default class TaskList {
     return this._collection;
   }
 
-  render(container = this._element) {
-    container.innerHTML = ``;
+  render() {
+    this._container.innerHTML = ``;
     const partOfElements = this._onFilter(this._collection);
 
     const fragment = document.createDocumentFragment();
     partOfElements.forEach((it) => {
       fragment.appendChild(it.render());
     });
-    container.appendChild(fragment);
+    this._container.appendChild(fragment);
   }
 
   unrender() {
     this._onFilterData = Object.values(this._collection);
+    this._container.innerHTML = ``;
   }
 }

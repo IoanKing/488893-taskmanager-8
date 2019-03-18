@@ -6,7 +6,6 @@ import {MAX_COUNT} from "./utils";
 export default class FilterList {
   constructor(container) {
     this._container = container;
-    this._element = null;
     this._dataCollection = null;
 
     this._onDataFiltering = this._onDataFiltering.bind(this);
@@ -132,30 +131,29 @@ export default class FilterList {
     return collection;
   }
 
-  render(container) {
-    this._element = container;
-    this._element.innerHTML = ``;
+  render() {
+    this._container.innerHTML = ``;
     this._collection.forEach((it, i) => {
       const newFilter = new Filter(it);
       newFilter.onClick = this._onCallback;
       if (i === 0) {
         newFilter.status.isActive = true;
       }
-      this._element.insertAdjacentHTML(`beforeend`, newFilter.render());
+      this._container.appendChild(newFilter.render());
     });
     this.addListener();
   }
 
   unrender() {
     this.removeListener();
-    this._element = null;
+    this._container.innerHTML = ``;
   }
 
   addListener() {
-    this._element.addEventListener(`click`, this._onDataFiltering);
+    this._container.addEventListener(`click`, this._onDataFiltering);
   }
 
   removeListener() {
-    this._element.removeEventListener(`click`, this._onDataFiltering);
+    this._container.removeEventListener(`click`, this._onDataFiltering);
   }
 }
