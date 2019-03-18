@@ -167,11 +167,4 @@ export default class Task {
     this._element.querySelector(`.${Selectors.CARD_EDIT_BTN}`)
       .removeEventListener(`click`, this._onEditButtonClick);
   }
-
-  update() {
-    this._element.classList.remove(Selectors.CARD_EDIT);
-    if (this._status.isEdit) {
-      this._element.classList.add(Selectors.CARD_EDIT);
-    }
-  }
 }

@@ -1,5 +1,3 @@
-import {createElement} from "./utils";
-
 export default class Filter {
   constructor(collection) {
     this._title = collection.title;
@@ -25,7 +23,7 @@ export default class Filter {
   }
 
   render() {
-    this._element = createElement(this.template, true);
+    this._element = this.template;
     return this._element;
   }
 
