@@ -1,8 +1,9 @@
-import {createElement} from "./utils";
 import Selectors from "./selectors";
+import Component from "./Component";
 
-export default class TaskEdit {
+export default class TaskEdit extends Component {
   constructor(collection) {
+    super();
     this._title = collection.title;
     this._picture = collection.picture;
     this._color = collection.color;
@@ -35,10 +36,6 @@ export default class TaskEdit {
 
   set onSubmit(fn) {
     this._onSubmit = fn;
-  }
-
-  get element() {
-    return this._element;
   }
 
   get template() {
@@ -312,17 +309,6 @@ export default class TaskEdit {
       </form>
     </article>
     `.trim();
-  }
-
-  render() {
-    this._element = createElement(this.template);
-    this.addListener();
-    return this._element;
-  }
-
-  unrender() {
-    this.removeListener();
-    this._element = null;
   }
 
   addListener() {

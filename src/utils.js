@@ -1,5 +1,5 @@
 const MIN_COUNT = 0;
-const MAX_COUNT = 30;
+const MAX_COUNT = 12;
 
 const DateGenerator = {
   MONTH_NAMES: [`January`, `February`, `March`, `April`, `May`, `June`, `Jule`, `August`, `September`, `October`, `November`, `December`],
@@ -35,4 +35,4 @@ const createElement = (elementTemplate, isMultiplyElement = false) => {
   return (isMultiplyElement) ? newElement : newElement.firstChild;
 };
 
-export {getRandomInt, getRandomElement, DateGenerator, createElement};
+export {getRandomInt, getRandomElement, DateGenerator, createElement, MAX_COUNT};

@@ -1,6 +1,6 @@
 import {getRandomInt, getRandomElement} from "./utils";
 
-const MAX_TASKS = 200;
+const MAX_TASKS = 50;
 const MAX_HASHTAG_COUNT = 3;
 
 const TimeConstants = {

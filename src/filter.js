@@ -1,14 +1,15 @@
-import {createElement} from "./utils";
+import Component from "./Component";
 
-export default class Filter {
+export default class Filter extends Component {
   constructor(collection) {
+    super();
     this._title = collection.title;
     this._count = collection.count;
 
-    this._element = null;
     this.status = {
       isActive: false
     };
+    this._muliplyBlocks = true;
   }
 
   get template() {
@@ -23,14 +24,4 @@ export default class Filter {
     </label>
     `.trim();
   }
-
-  render() {
-    this._element = createElement(this.template, true);
-    return this._element;
-  }
-
-  unrender() {
-    this._element = null;
-  }
-
 }

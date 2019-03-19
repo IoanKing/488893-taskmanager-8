@@ -2,12 +2,11 @@ import Task from "./task";
 import mockdata from "./mock";
 import TaskEdit from "./task-edit";
 
-const MAX_TASK_ONPAGE = 20;
-
 export default class TaskList {
   constructor(container) {
     this._container = container;
-    this._element = this.getCollection(mockdata);
+    this._collection = this._getCollection(mockdata);
+    this._onFilterData = Object.values(this._collection);
   }
 
   makeTask(element) {
@@ -31,7 +30,7 @@ export default class TaskList {
     return newTask;
   }
 
-  getCollection(collection) {
+  _getCollection(collection) {
     const tasks = [];
     collection.forEach((element) => {
       tasks.push(this.makeTask(element));
@@ -39,13 +38,27 @@ export default class TaskList {
     return tasks;
   }
 
+  set onClick(fn) {
+    this._collection.forEach((element) => {
+      element.onClick = fn;
+    });
+  }
+
+  set Filter(fn) {
+    this._onFilter = fn;
+  }
+
   get element() {
     return this._element;
   }
 
+  get collection() {
+    return this._collection;
+  }
+
   render() {
     this._container.innerHTML = ``;
-    const partOfElements = this._element.slice(0, Math.min(MAX_TASK_ONPAGE, this._element.length));
+    const partOfElements = this._onFilter(this._collection);
 
     const fragment = document.createDocumentFragment();
     partOfElements.forEach((it) => {
@@ -55,12 +68,7 @@ export default class TaskList {
   }
 
   unrender() {
-    this._element = null;
-  }
-
-  update(collection = mockdata) {
-    this.unrender();
-    this.getCollection(collection);
-    this.render();
+    this._onFilterData = Object.values(this._collection);
+    this._container.innerHTML = ``;
   }
 }
