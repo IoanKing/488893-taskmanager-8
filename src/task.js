@@ -1,8 +1,9 @@
-import {createElement} from "./utils";
 import Selectors from "./selectors";
+import Component from "./Component";
 
-export default class Task {
+export default class Task extends Component {
   constructor(collection) {
+    super();
     this._title = collection.title;
     this._picture = collection.picture;
     this._color = collection.color;
@@ -141,17 +142,6 @@ export default class Task {
       </form>
     </article>
     `.trim();
-  }
-
-  render() {
-    this._element = createElement(this.template);
-    this.addListener();
-    return this._element;
-  }
-
-  unrender() {
-    this.removeListener();
-    this._element = null;
   }
 
   addListener() {
