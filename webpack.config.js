@@ -1,5 +1,6 @@
 /* eslint-disable */
 const path = require(`path`);
+var flatpickr = require("flatpickr");
 module.exports = {
   mode: `development`,
   entry: `./src/main.js`,

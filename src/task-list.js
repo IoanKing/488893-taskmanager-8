@@ -20,8 +20,16 @@ export default class TaskList {
       this._container.replaceChild(newTaskEdit.element, newTask.element);
       newTask.unrender();
 
-      newTaskEdit.onSubmit = (evtSubmit) => {
-        evtSubmit.preventDefault();
+      newTaskEdit.onSubmit = (newObject) => {
+        const collection = {};
+        collection.title = newObject.title;
+        collection.tags = newObject.tags;
+        collection.color = newObject.color;
+        collection.repeatingDays = newObject.repeatingDays;
+        collection.dueDate = newObject.dueDate;
+
+        console.log(collection);
+        newTask.update(collection);
         newTask.render();
         this._container.replaceChild(newTask.element, newTaskEdit.element);
         newTaskEdit.unrender();

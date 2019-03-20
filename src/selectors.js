@@ -6,5 +6,9 @@ export default {
   CARD_EDIT_BTN: `card__btn--edit`,
   CARD_EDIT: `card--edit`,
   CARD_FROM: `card__form`,
-  CHECKED: `checked`
+  CARD_DATE: `card__date`,
+  CARD_TIME: `card__time`,
+  CHECKED: `checked`,
+  CARD_DATE_DEADLINE: `card__date-deadline-toggle`,
+  CARD_REPEAT_TOGGLE: `card__repeat-toggle`,
 };

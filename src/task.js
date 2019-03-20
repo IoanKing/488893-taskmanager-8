@@ -153,4 +153,13 @@ export default class Task extends Component {
     this._element.querySelector(`.${Selectors.CARD_EDIT_BTN}`)
       .removeEventListener(`click`, this._onEditButtonClick);
   }
+
+  update(collection) {
+    this._title = collection.title;
+    this._picture = collection.picture;
+    this._color = collection.color;
+    this._repeatingDays = collection.repeatingDays;
+    this._tags = collection.tags;
+    this._dueDate = collection.dueDate;
+  }
 }
