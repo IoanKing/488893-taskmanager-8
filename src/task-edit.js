@@ -1,6 +1,7 @@
 import Selectors from "./selectors";
 import Component from "./Component";
 import flatpickr from 'flatpickr';
+import moment from "moment";
 
 export default class TaskEdit extends Component {
   constructor(collection) {
@@ -17,16 +18,12 @@ export default class TaskEdit extends Component {
     this._onChangeRepeated = this._onChangeRepeated.bind(this);
 
     this._state.isDate = false;
-    this._state.isRepeated = false;
+    this._state.isRepeated = Object.values(this._repeatingDays).some((it) => it === true);
 
     this._element = null;
     this._status = {
       isEdit: false
     };
-  }
-
-  get _isDeadline() {
-    return this._dueDate < new Date();
   }
 
   _onChangeDate() {
@@ -57,8 +54,12 @@ export default class TaskEdit extends Component {
     this._element.innerHTML = this.template;
   }
 
-  _isRepeated() {
-    return Object.values(this._repeatingDays).some((it) => it === true);
+  _isData() {
+    this._state.isData = Object.values(this._repeatingDays).some((it) => it.dueDate !== ``);
+  }
+
+  get _isDeadline() {
+    return moment(this._dueDate).isSame(moment(new Date()).subtract(1, `days`), `day`);
   }
 
   _processForm(formData) {
@@ -95,14 +96,8 @@ export default class TaskEdit extends Component {
   }
 
   get template() {
-    const newDate = new Date();
-    newDate.setTime(this._dueDate);
-
-    const month = newDate.toLocaleString(`en-US`, {month: `long`});
-    const date = `${newDate.getDate()} ${month}`;
-    const time = newDate.toLocaleString(`en-US`, {hour12: true, hour: `2-digit`, minute: `2-digit`});
     return `
-    <article class="card card--edit card--${(this._color)} ${this._isRepeated() ? `card--repeat` : ``}${ this._isDeadline ? ` card--deadline` : ``}">
+    <article class="card card--edit card--${(this._color)} ${this._state.isRepeated ? `card--repeat` : ``}${(this._isDeadline && this._state.isDate) ? ` card--deadline` : ``}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__control">
@@ -111,7 +106,7 @@ export default class TaskEdit extends Component {
             </button>
             <button
               type="button"
-              class="card__btn card__btn--archive ${!this._isDone ? `card__btn--disabled` : ``}"
+              class="card__btn card__btn--archive ${!this._isArchive ? `card__btn--disabled` : ``}"
             >
               archive
             </button>
@@ -151,27 +146,27 @@ export default class TaskEdit extends Component {
                     <input
                       class="card__date"
                       type="text"
-                      placeholder="${date}"
+                      placeholder="${moment(this._dueDate).format(`DD MMMM`)}"
                       name="date"
-                      value="${date}"
+                      value="${moment(this._dueDate).format(`DD MMMM`)}"
                     />
                   </label>
                   <label class="card__input-deadline-wrap">
                     <input
                       class="card__time"
                       type="text"
-                      placeholder="${time}"
+                      placeholder="${moment(this._dueDate).format(`hh:mm a`)}"
                       name="time"
-                      value="${time}"
+                      value="${moment(this._dueDate).format(`hh:mm a`)}"
                     />
                   </label>
                 </fieldset>
 
                 <button class="card__repeat-toggle" type="button">
-                  repeat:<span class="card__repeat-status">${this._state.isRepeating ? `yes` : `no`}</span>
+                  repeat: <span class="card__repeat-status">${this._state.isRepeated ? `yes` : `no`}</span>
                 </button>
 
-                <fieldset class="card__repeat-days" ${!this._state.isRepeated && `disabled`}>
+                <fieldset class="card__repeat-days" ${!this._state.isRepeated ? `disabled` : ``}>
                   <div class="card__repeat-days-inner">
                     <input
                       class="visually-hidden card__repeat-day-input"

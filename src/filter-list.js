@@ -43,7 +43,7 @@ export default class FilterList {
       };
 
       const filterArchive = (collection) => {
-        return Object.values(collection).filter((it) => it._isDone).slice(0, Math.min(MAX_COUNT, collection.length));
+        return Object.values(collection).filter((it) => it._isArchive).slice(0, Math.min(MAX_COUNT, collection.length));
       };
 
       switch (filter) {
@@ -125,7 +125,7 @@ export default class FilterList {
       },
       {
         title: `Archive`,
-        count: Object.values(mockdata).reduce((sum, current) => +sum + +current.isDone, 0),
+        count: Object.values(mockdata).reduce((sum, current) => +sum + +current.isArchive, 0),
       },
     ];
     return collection;

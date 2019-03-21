@@ -9,27 +9,25 @@ export default class TaskList {
     this._onFilterData = Object.values(this._collection);
   }
 
-  makeTask(element) {
-    const newTask = new Task(element);
+  makeTask(task) {
+    const newTask = new Task(task);
     newTask.onEdit = (evtEdit) => {
       evtEdit.preventDefault();
 
-      const newTaskEdit = new TaskEdit(element);
+      const newTaskEdit = new TaskEdit(task);
 
       newTaskEdit.render();
       this._container.replaceChild(newTaskEdit.element, newTask.element);
       newTask.unrender();
 
       newTaskEdit.onSubmit = (newObject) => {
-        const collection = {};
-        collection.title = newObject.title;
-        collection.tags = newObject.tags;
-        collection.color = newObject.color;
-        collection.repeatingDays = newObject.repeatingDays;
-        collection.dueDate = newObject.dueDate;
+        task.title = newObject.title;
+        task.tags = newObject.tags;
+        task.color = newObject.color;
+        task.repeatingDays = newObject.repeatingDays;
+        task.dueDate = newObject.dueDate;
 
-        console.log(collection);
-        newTask.update(collection);
+        newTask.update(task);
         newTask.render();
         this._container.replaceChild(newTask.element, newTaskEdit.element);
         newTaskEdit.unrender();

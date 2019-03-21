@@ -62,7 +62,7 @@ const getTask = () => ({
     'su': MockData.BOOL[getRandomInt(0, BOOL_LENGTH)],
   },
   isFavorite: MockData.BOOL[getRandomInt(0, BOOL_LENGTH)],
-  isDone: MockData.BOOL[getRandomInt(0, BOOL_LENGTH)],
+  isArchive: MockData.BOOL[getRandomInt(0, BOOL_LENGTH)],
 });
 
 /**

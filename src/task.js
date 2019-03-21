@@ -1,5 +1,6 @@
 import Selectors from "./selectors";
 import Component from "./Component";
+import moment from "moment";
 
 export default class Task extends Component {
   constructor(collection) {
@@ -8,20 +9,13 @@ export default class Task extends Component {
     this._picture = collection.picture;
     this._color = collection.color;
     this._repeatingDays = collection.repeatingDays;
-    this._isDone = collection.isDone;
+    this._isArchive = collection.isArchive;
     this._isFavorite = collection.isFavorite;
     this._tags = collection.tags;
     this._dueDate = collection.dueDate;
 
     this._onEditButtonClick = this._onEditButtonClick.bind(this);
-    this._element = null;
-    this._status = {
-      isEdit: false
-    };
-  }
-
-  get _isDeadline() {
-    return this._dueDate < new Date();
+    this._onEdit = null;
   }
 
   _isRepeated() {
@@ -39,14 +33,8 @@ export default class Task extends Component {
   }
 
   get template() {
-    const newDate = new Date();
-    newDate.setTime(this._dueDate);
-
-    const month = newDate.toLocaleString(`en-US`, {month: `long`});
-    const date = `${newDate.getDate()} ${month}`;
-    const time = newDate.toLocaleString(`en-US`, {hour12: true, hour: `2-digit`, minute: `2-digit`});
     return `
-    <article class="card card--${(this._color)} ${this._isRepeated() ? `card--repeat` : ``}${ this._isDeadline ? ` card--deadline` : ``}">
+    <article class="card card--${(this._color)} ${this._isRepeated() ? `card--repeat` : ``}">
       <form class="card__form" method="get">
         <div class="card__inner">
           <div class="card__control">
@@ -55,7 +43,7 @@ export default class Task extends Component {
             </button>
             <button
               type="button"
-              class="card__btn card__btn--archive ${!this._isDone ? `card__btn--disabled` : ``}"
+              class="card__btn card__btn--archive ${!this._isArchive ? `card__btn--disabled` : ``}"
             >
               archive
             </button>
@@ -86,30 +74,7 @@ export default class Task extends Component {
           <div class="card__settings">
             <div class="card__details">
               <div class="card__dates">
-                <button class="card__date-deadline-toggle" type="button">
-                  date: <span class="card__date-status">no</span>
-                </button>
-
-                <fieldset class="card__date-deadline" ${(this._isDeadline) ? `disabled` : ``}>
-                  <label class="card__input-deadline-wrap">
-                    <input
-                      class="card__date"
-                      type="text"
-                      placeholder="${date}"
-                      name="date"
-                      value="${date}"
-                    />
-                  </label>
-                  <label class="card__input-deadline-wrap">
-                    <input
-                      class="card__time"
-                      type="text"
-                      placeholder="${time}"
-                      name="time"
-                      value="${time}"
-                    />
-                  </label>
-                </fieldset>
+                ${moment(this._dueDate).format(`DD MMMM hh:mm`)}
               </div>
 
               <div class="card__hashtag">
