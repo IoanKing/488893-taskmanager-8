@@ -25,17 +25,6 @@ export default class TaskEdit extends Component {
     };
   }
 
-  _onDateChange(objDate) {
-    this._dueDate = moment(this._dueDate).set(`date`, moment(objDate[0]).format(`DD`)).format();
-    this._dueDate = moment(this._dueDate).set(`month`, moment(objDate[0]).subtract(1, `month`).format(`MM`)).format();
-    this._dueDate = moment(this._dueDate).set(`year`, moment(objDate[0]).format(`YYYY`)).format();
-  }
-
-  _onTimeChange(objDate) {
-    this._dueDate = moment(this._dueDate).set(`hour`, moment(objDate[0]).format(`H`)).format();
-    this._dueDate = moment(this._dueDate).set(`minute`, moment(objDate[0]).format(`m`)).format();
-  }
-
   _onChangeDate() {
     this._state.isDate = !this._state.isDate;
     this.removeListener();
@@ -395,7 +384,6 @@ export default class TaskEdit extends Component {
         altFormat: `j F`,
         dateFormat: `j F`,
         defaultDate: moment(this._dueDate).format(`DD MMMM`),
-        onChange: this._onDateChange.bind(this)
       });
       flatpickr(`.${Selectors.CARD_TIME}`, {
         enableTime: true,
@@ -404,7 +392,6 @@ export default class TaskEdit extends Component {
         altFormat: `h:i K`,
         dateFormat: `h:i K`,
         defaultDate: moment(this._dueDate).format(`hh:mm a`),
-        onChange: this._onTimeChange.bind(this)
       });
     }
   }
