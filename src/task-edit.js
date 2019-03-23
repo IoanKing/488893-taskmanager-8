@@ -394,6 +394,7 @@ export default class TaskEdit extends Component {
         altInput: true,
         altFormat: `j F`,
         dateFormat: `j F`,
+        defaultDate: moment(this._dueDate).format(`DD MMMM`),
         onChange: this._onDateChange.bind(this)
       });
       flatpickr(`.${Selectors.CARD_TIME}`, {
@@ -402,6 +403,7 @@ export default class TaskEdit extends Component {
         altInput: true,
         altFormat: `h:i K`,
         dateFormat: `h:i K`,
+        defaultDate: moment(this._dueDate).format(`hh:mm a`),
         onChange: this._onTimeChange.bind(this)
       });
     }
