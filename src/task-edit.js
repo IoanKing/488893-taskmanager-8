@@ -11,28 +11,29 @@ export default class TaskEdit extends Component {
     this._color = collection.color;
     this._repeatingDays = collection.repeatingDays;
     this._tags = collection.tags;
-    this._dueDate = collection.dueDate;
+    this._dueDate = (collection.dueDate) ? collection.dueDate : new Date();
 
     this._onSubmitButtonClick = this._onSubmitButtonClick.bind(this);
     this._onChangeDate = this._onChangeDate.bind(this);
+    this._onChangeRepeated = this._onChangeRepeated.bind(this);
 
-    this._state.isDate = false;
+    this._state.isDate = (collection.dueDate) ? true : false;
     this._state.isRepeated = Object.values(this._repeatingDays).some((it) => it === true);
 
-    this._element = null;
     this._status = {
       isEdit: false
     };
   }
 
   _onDateChange(objDate) {
-    this._dueDate = moment(this._dueDate).set(`date`, moment(objDate[0]).format(`D`)).valueOf();
-    this._dueDate = moment(this._dueDate).set(`month`, moment(objDate[0]).format(`M`)).valueOf();
+    this._dueDate = moment(this._dueDate).set(`date`, moment(objDate[0]).format(`DD`)).format();
+    this._dueDate = moment(this._dueDate).set(`month`, moment(objDate[0]).subtract(1, `month`).format(`MM`)).format();
+    this._dueDate = moment(this._dueDate).set(`year`, moment(objDate[0]).format(`YYYY`)).format();
   }
 
   _onTimeChange(objDate) {
-    this._dueDate = moment(this._dueDate).set(`hour`, moment(objDate[0]).format(`H`)).valueOf();
-    this._dueDate = moment(this._dueDate).set(`minute`, moment(objDate[0]).format(`m`)).valueOf();
+    this._dueDate = moment(this._dueDate).set(`hour`, moment(objDate[0]).format(`H`)).format();
+    this._dueDate = moment(this._dueDate).set(`minute`, moment(objDate[0]).format(`m`)).format();
   }
 
   _onChangeDate() {
@@ -53,6 +54,9 @@ export default class TaskEdit extends Component {
     evt.preventDefault();
     const formData = new FormData(this._element.querySelector(`.${Selectors.CARD_FROM}`));
     const newData = this._processForm(formData);
+    if (!this._state.isDate) {
+      newData.dueDate = null;
+    }
     if (typeof this._onSubmit === `function`) {
       this._onSubmit(newData);
     }
@@ -96,8 +100,6 @@ export default class TaskEdit extends Component {
         taskEditMapper[property](value);
       }
     }
-
-    console.log(entry);
 
     return entry;
   }
@@ -423,7 +425,6 @@ export default class TaskEdit extends Component {
   }
 
   static createMapper(target) {
-    console.log(target);
     return {
       hashtag: (value) => {
         target.tags.add(value);
@@ -437,7 +438,16 @@ export default class TaskEdit extends Component {
       repeat: (value) => {
         target.repeatingDays[value] = true;
       },
-      date: (value) => target.dueDate[value]
+      date: (value) => {
+        target.dueDate = moment(target.dueDate).set(`date`, moment(value, `DD MMMM`).format(`DD`)).format();
+        target.dueDate = moment(target.dueDate).set(`month`, moment(value, `DD MMMM`).subtract(1, `month`).format(`MM`)).format();
+      },
+      time: (value) => {
+        if (value) {
+          target.dueDate = moment(target.dueDate).set(`hour`, moment(value, `h:m a`).format(`h`)).format();
+          target.dueDate = moment(target.dueDate).set(`minute`, moment(value, `h:m a`).format(`m`)).format();
+        }
+      },
     };
   }
 }

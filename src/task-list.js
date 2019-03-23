@@ -2,6 +2,8 @@ import Task from "./task";
 import mockdata from "./mock";
 import TaskEdit from "./task-edit";
 
+import moment from "moment";
+
 export default class TaskList {
   constructor(container) {
     this._container = container;
@@ -25,7 +27,7 @@ export default class TaskList {
         task.tags = newObject.tags;
         task.color = newObject.color;
         task.repeatingDays = newObject.repeatingDays;
-        task.dueDate = newObject.dueDate;
+        task.dueDate = moment(newObject.dueDate).toISOString();
 
         newTask.update(task);
         newTask.render();
