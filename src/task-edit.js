@@ -158,9 +158,9 @@ export default class TaskEdit extends Component {
                     <input
                       class="card__time"
                       type="text"
-                      placeholder="${moment(this._dueDate).format(`hh:mm a`)}"
+                      placeholder="${moment(this._dueDate).format(`hh:mm A`)}"
                       name="time"
-                      value="${moment(this._dueDate).format(`hh:mm a`)}"
+                      value="${moment(this._dueDate).format(`hh:mm A`)}"
                       data-input
                     />
                   </label>
@@ -433,8 +433,8 @@ export default class TaskEdit extends Component {
       },
       time: (value) => {
         if (value) {
-          target.dueDate = moment(target.dueDate).set(`hour`, moment(value, `h:m a`).format(`h`)).format();
-          target.dueDate = moment(target.dueDate).set(`minute`, moment(value, `h:m a`).format(`m`)).format();
+          target.dueDate = moment(target.dueDate).set(`hour`, moment(value, `h:mm A`).format(`HH`)).format();
+          target.dueDate = moment(target.dueDate).set(`minute`, moment(value, `h:mm A`).format(`mm`)).format();
         }
       },
     };
